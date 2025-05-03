@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Soil Health Report</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap 5 CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background: #f0f2f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .form-wrapper {
+      max-width: 800px;
+      margin: 40px auto;
+      background: #ffffff;
+      padding: 30px 40px;
+      border-radius: 15px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #333;
+    }
+
+    .form-label {
+      font-weight: 500;
+      color: #555;
+    }
+
+    .form-control {
+      border-radius: 10px;
+      border: 1px solid #ced4da;
+    }
+
+    .form-control:focus {
+      border-color: #0d6efd;
+      box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 50px;
+    }
+
+    .btn-submit:hover {
+      background-color: #0b5ed7;
+    }
+    .btn-secondary:hover{
+      background-color: gray;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="form-wrapper">
+    <h2>Add Soil Health Report</h2>
+
+    {% if success %}
+        <div class="alert alert-success">Soil health details of shri {{ farmer_name }} submitted successfully!</div>
+    {% endif %}
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+
+      <div class="row g-3">
+
+        <!-- Farmer Name -->
+        <div class="col-md-6">
+          <label class="form-label" for="id_farmer_name">Farmer Name</label>
+          {{ form.farmer_name }}
+        </div>
+
+        <!-- Mobile Number -->
+        <div class="col-md-6">
+          <label class="form-label" for="id_mobile_number">Mobile Number</label>
+          {{ form.mobile_number }}
+        </div>
+
+        <!-- pH -->
+        <div class="col-md-4">
+          <label class="form-label" for="id_ph">pH</label>
+          {{ form.ph }}
+        </div>
+
+        <!-- EC -->
+        <div class="col-md-4">
+          <label class="form-label" for="id_ec">EC</label>
+          {{ form.ec }}
+        </div>
+
+        <!-- OC -->
+        <div class="col-md-4">
+          <label class="form-label" for="id_oc">OC</label>
+          {{ form.oc }}
+        </div>
+
+        <!-- N -->
+        <div class="col-md-4">
+          <label class="form-label" for="id_n">Nitrogen (N)</label>
+          {{ form.n }}
+        </div>
+
+        <!-- P -->
+        <div class="col-md-4">
+          <label class="form-label" for="id_p">Phosphorus (P)</label>
+          {{ form.p }}
+        </div>
+
+        <!-- K -->
+        <div class="col-md-4">
+          <label class="form-label" for="id_k">Potassium (K)</label>
+          {{ form.k }}
+        </div>
+
+        <!-- B -->
+        <div class="col-md-4">
+          <label class="form-label" for="id_b">Boron (B)</label>
+          {{ form.b }}
+        </div>
+
+        <!-- S -->
+        <div class="col-md-4">
+          <label class="form-label" for="id_s">Sulfur (S)</label>
+          {{ form.s }}
+        </div>
+
+        <!-- Zn -->
+        <div class="col-md-4">
+          <label class="form-label" for="id_zn">Zinc (Zn)</label>
+          {{ form.zn }}
+        </div>
+
+        <!-- Cu -->
+        <div class="col-md-4">
+          <label class="form-label" for="id_cu">Copper (Cu)</label>
+          {{ form.cu }}
+        </div>
+
+        <!-- Fe -->
+        <div class="col-md-4">
+          <label class="form-label" for="id_fe">Iron (Fe)</label>
+          {{ form.fe }}
+        </div>
+
+        <!-- Mn -->
+        <div class="col-md-4">
+          <label class="form-label" for="id_mn">Manganese (Mn)</label>
+          {{ form.mn }}
+        </div>
+
+        <!-- Publish -->
+        <div class="col-md-4 mt-3">
+            <label class="form-label" for="id_status">Publish</label>
+            {{ form.publish }}
+        </div>
+          
+        <!-- Remarks -->
+        <div class="col-md-8">
+          <label class="form-label" for="id_remarks">Remarks</label>
+          {{ form.remarks }}
+        </div>
+
+        <!-- Submit Button -->
+        <div class="mt-4 d-flex justify-content-between">
+          <button type="submit" class="btn btn-primary btn-submit">Submit</button>
+          <button type="reset" class="btn btn-submit btn-secondary" id ="resetFormBtn">Reset</button>
+          <button type="button" class="btn btn-submit btn-secondary" id="executeButton">Send</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById("resetFormBtn").addEventListener("click", function(event) {
+        event.preventDefault();
+        
+        // Clear all input fields
+        document.querySelectorAll("input, select, textarea").forEach(field => {
+            if (field.type === "checkbox" || field.type === "radio") {
+                field.checked = false;
+            } else {
+                field.value = "";
+            }
+        });
+    });
+    document.getElementById("executeButton").addEventListener("click", function() {
+    fetch("{% url 'sendfile' %}")
+    .then(response => response.json())
+    .then(data => alert(data.message))
+    .catch(error => console.error("Error:", error));
+});
+  </script>
+  
+</body>
+</html>
